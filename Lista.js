@@ -1,19 +1,21 @@
 import { React, useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, FlatList, TextInput, Image } from "react-native";
+import { useContextState } from "./contextState";
 
-/*
-const [data, setData] = useState([]);
-const [isLoading, setIsLoading] = useState(true)
 
-function postData(nombre) {
-  const response =  fetch(`https://api.spoonacular.com/recipes/716429/information?apiKey=fd84a84ef20c45ff89b371786e57ef04&includeNutrition=true/recipes/complexSearch?query=${nombre}number=2.`, {
+const { contextState, setContextState } = useContextState()
+const [buscador, setBuscador] = useState()
+
+function postData(buscador) {
+  const response =  fetch(`https://api.spoonacular.com/recipes/complexSearch?query=${buscador}&maxFat=25&number=2&apiKey=fd84a84ef20c45ff89b371786e57ef04&includeNutrition=true.`, {
   method: 'GET',
   headers: {'Content-Type': 'application/json'}
   }).then((response) => response.json())
 .then((responseJson) => {
-  setData(responseJson.results);
-  setIsLoading(false)
+  setContextState({newValue: responseJson.results, type: "SET_RECIPES"});
+  setContextState({newValue: false, type: "SET_LOADING"});
+
 })
 .catch((error) => {
   alert(JSON.stringify(error));
@@ -24,24 +26,12 @@ function postData(nombre) {
 
 
 useEffect(()=>{
-  postData(nombre)
-},[]);
-*/
 
-const DATA = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    title: "Third Item",
-  },
-];
+  postData(buscador)
+},[buscador]);
+
+
+
 
 const Item = ({ title, image }) => (
   <View style={styles.item}>
@@ -52,20 +42,21 @@ const Item = ({ title, image }) => (
 
 const Lista = () => {
   return (
+
     <View style={styles.container}>
       <Text>Ingrese el plato que desea buscar</Text>
       <TextInput
         style={styles.input}
         placeholder="ingrese..."
-        onChangeText={useEffect}
+        onChangeText={setBuscador}
         id='nombre'
+        value={buscador}
       />
       <FlatList
-        data={DATA}
+        data={contextState.allRecipies}
         renderItem={({ item }) => <Item title={item.title}  />}
         keyExtractor={(item) => item.id}
       />
-      <StatusBar style="auto" />
     </View>
   );
 };

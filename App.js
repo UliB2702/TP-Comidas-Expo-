@@ -4,12 +4,14 @@ import { StyleSheet, Text, View, ImageBackground, Button } from 'react-native';
 import { TextInput } from 'react-native-web';
 import Formulario from './Formulario';
 import Lista from './Lista';
+import { ContextProvider } from './contextState';
 
 export default function App() {
   return (
-    <>
-      <Lista/>
-      </>
+      <ContextProvider>
+        <Lista/>
+        <StatusBar style="auto" />
+      </ContextProvider>
   );
 }
 
