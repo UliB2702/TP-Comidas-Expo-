@@ -14,9 +14,10 @@ const Lista = () => {
   const { contextState, setContextState } = useContextState();
   const [buscador, setBuscador] = useState('');
 
-  function postData(buscador) {
+
+  useEffect(() => {
     const response = fetch(
-      `https://api.spoonacular.com/recipes/complexSearch?query=${buscador}&maxFat=25&number=2&apiKey=a126dd4cea244923bacc626f3d372f60&includeNutrition=true.`,
+      `https://api.spoonacular.com/recipes/complexSearch?query=${buscador}&maxFat=25&number=2&apiKey=383fb85806e048838a7e035f4b6bade9&includeNutrition=true.`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -26,7 +27,7 @@ const Lista = () => {
       .then((responseJson) => {
         setContextState({
           newValue: responseJson.results,
-          type: "SET_RECIPES",
+          type: "SET_RECEPIES",
         });
         setContextState({ newValue: false, type: "SET_LOADING" });
       })
@@ -34,10 +35,7 @@ const Lista = () => {
         alert(JSON.stringify(error));
         console.error(error);
       });
-  }
-
-  useEffect(() => {
-    postData(buscador);
+      console.log(response)
   }, [buscador]);
 
   const Item = ({ title, image }) => (
@@ -46,7 +44,6 @@ const Lista = () => {
       <Text style={styles.title}>{title}</Text>
     </View>
   );
-
   return (
     <View style={styles.container}>
       <Text>Ingrese el plato que desea buscar</Text>
