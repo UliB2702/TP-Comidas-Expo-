@@ -10,7 +10,6 @@ export default function App() {
   return (
       <ContextProvider>
         <Lista/>
-        <StatusBar style="auto" />
       </ContextProvider>
   );
 }
