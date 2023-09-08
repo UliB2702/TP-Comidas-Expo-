@@ -1,22 +1,26 @@
-import React, { useState } from 'react';
-import { View, Text, Button } from 'react-native';
+import React from 'react';
+import { StatusBar } from 'expo-status-bar';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TextInput,
+  Image,
+  TouchableOpacity,
+  Button
+} from "react-native";
+import { useState } from 'react';
+import { useContextState } from "./contextState";
 
 
 const Menu = () => {
   const {contextState, setContextState} = useContextState();
-
-
-  const plato = [
-    { id: 1, name: 'Plato 1', description: 'Descripcion 1' },
-    { id: 2, name: 'Plato 2', description: 'Descripcion 2' },
-    { id: 3, name: 'Plato 3', description: 'Descripcion 3' },
-  ];
+  const {plato, seleccionarPlato} = useState();
+  
 
   const agregaMenu = (plato) => {
-        setContextState({
-            newValue: plato,
-            type: ActionTypes.setMenu,
-        })
+    return menu.some((item) => item.id === dish.id);
   };
 
   return (

@@ -7,7 +7,8 @@ import {
   FlatList,
   TextInput,
   Image,
-} from "react-native";
+  Button,
+}from "react-native";
 import { useContextState } from "./contextState";
 
 const Lista = () => {
@@ -16,8 +17,9 @@ const Lista = () => {
 
 
   useEffect(() => {
+    if(buscador.length > 1){
     const response = fetch(
-      `https://api.spoonacular.com/recipes/complexSearch?query=${buscador}&maxFat=25&number=2&apiKey=383fb85806e048838a7e035f4b6bade9&includeNutrition=true.`,
+      `https://api.spoonacular.com/recipes/complexSearch?query=${buscador}&maxFat=25&number=20&apiKey=012e92b2a7d64c6b951c150fbddf774a&includeNutrition=true.`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -30,18 +32,20 @@ const Lista = () => {
           type: "SET_RECEPIES",
         });
         setContextState({ newValue: false, type: "SET_LOADING" });
+        console.log(responseJson)
       })
       .catch((error) => {
         alert(JSON.stringify(error));
         console.error(error);
       });
-      console.log(response)
-  }, [buscador]);
+}}, [buscador]);
+  
 
   const Item = ({ title, image }) => (
     <View style={styles.item}>
-      <Image source={image} />
       <Text style={styles.title}>{title}</Text>
+      <Image source={{uri: image}} />
+      <Button title="Mas detalle"/>
     </View>
   );
   return (
@@ -49,14 +53,14 @@ const Lista = () => {
       <Text>Ingrese el plato que desea buscar</Text>
       <TextInput
         style={styles.input}
-        placeholder="ingrese..."
+        placeholder="Ingrese..."
         onChangeText={setBuscador}
         id="nombre"
         value={buscador}
       />
       <FlatList
-        data={contextState?.allRecipies ?? []}
-        renderItem={({ item }) => <Item title={item.title} />}
+        data={contextState?.allRecepies ?? []}
+        renderItem={({ item }) => <Item title={item.title} image={item.image} />}
         keyExtractor={(item) => item.id}
       />
     </View>
@@ -66,13 +70,13 @@ const Lista = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#34813C",
+    backgroundColor: "#634fe3",
     alignItems: "center",
     justifyContent: "center",
     marginTop: StatusBar.currentHeight || 0,
   },
   item: {
-    backgroundColor: "#f9c2ff",
+    backgroundColor: "#ccc2ff",
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
