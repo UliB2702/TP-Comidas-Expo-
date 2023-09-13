@@ -10,7 +10,7 @@ import {
   Button,
 } from "react-native";
 import { useState } from "react";
-import { useContextState } from "./contextState";
+import { ContextProvider, useContextState } from "./contextState";
 
 const Formulario = ({navigation}) => {
   const { contextState, setContextState } = useContextState();
@@ -31,6 +31,7 @@ const Formulario = ({navigation}) => {
     })
       .then( async (response) =>  {
         const token = await response.json()
+        console.log(token.token)
         setContextState({
           newValue: token.token,
           type: "SET_USER_TOKEN",
@@ -55,6 +56,7 @@ const Formulario = ({navigation}) => {
   };
 
   return (
+    <ContextProvider>
     <View style={styles.container}>
       <Text>Email:</Text>
       <TextInput
@@ -82,6 +84,7 @@ const Formulario = ({navigation}) => {
         <Text style={{ color: "white" }}>Enviar</Text>
       </Pressable>
     </View>
+    </ContextProvider>
   );
 };
 
