@@ -25,10 +25,9 @@ const Lista = () => {
         headers: { "Content-Type": "application/json" },
       }
     )
-      .then((response) => response.json())
-      .then((responseJson) => {
+      .then((response) => {
         setContextState({
-          newValue: responseJson.results,
+          newValue: response.json().results,
           type: "SET_RECEPIES",
         });
         setContextState({ newValue: false, type: "SET_LOADING" });
@@ -40,6 +39,10 @@ const Lista = () => {
       });
 }}, [buscador]);
   
+useEffect(() => {
+  console.log(contextState)
+}, [contextState.userToken]
+)
 
   const Item = ({ title, image }) => (
     <View style={styles.item}>
@@ -49,8 +52,10 @@ const Lista = () => {
     </View>
   );
   return (
-    <View style={styles.container}>
-      <Text>Ingrese el plato que desea buscar</Text>
+    
+      (contextState.userToken) ?  
+      <View style={styles.container}>
+      
       <TextInput
         style={styles.input}
         placeholder="Ingrese..."
@@ -63,7 +68,14 @@ const Lista = () => {
         renderItem={({ item }) => <Item title={item.title} image={item.image} />}
         keyExtractor={(item) => item.id}
       />
-    </View>
+    </View> :
+      <View style={styles.container}>
+        <Text style={styles.alerta}>Atencion! No se le permite usar el buscador debido a que no inicio sesion. Vaya a la pagina principal para hacerlo</Text>
+      </View>
+       
+      
+    
+    
   );
 };
 
@@ -84,6 +96,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
   },
+  alerta: {
+    fontWeight: "bold",
+    fontSize: 20
+  }
 });
 
 export default Lista;

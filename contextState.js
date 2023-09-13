@@ -12,7 +12,7 @@ export const ActionTypes = {
   setRecepies: "SET_RECEPIES",
 };
 
-export const reducer = (state = {}, action) => {
+export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.setLoading: {
       return { ...state, loading: action.newValue };
@@ -21,9 +21,6 @@ export const reducer = (state = {}, action) => {
       return { ...state, allRecepies: action.newValue };
     }
     case ActionTypes.setUserToken: {
-      if (action.newValue === null) {
-        return { ...state, userToken: "" };
-      }
       return { ...state, userToken: action.newValue };
     }
     default: {
@@ -39,10 +36,10 @@ export const inicialContext = {
 
 const Context = React.createContext(inicialContext);
 
-export function ContextProvider({ children, initialState = initialState }) {
+export function ContextProvider({ children, state = initialState }) {
   const [contextState, setContextState] = React.useReducer(
     reducer,
-    initialState
+    state
   );
 
     return ( <Context.Provider value={{contextState, setContextState}}>

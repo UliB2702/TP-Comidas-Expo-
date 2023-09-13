@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Text,
   View,
-  FlatList,
   TextInput,
   Image,
   Pressable,
@@ -13,7 +12,7 @@ import {
 import { useState } from "react";
 import { useContextState } from "./contextState";
 
-const Formulario = () => {
+const Formulario = ({navigation}) => {
   const { contextState, setContextState } = useContextState();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,15 +29,14 @@ const Formulario = () => {
         'password': password,
       }),
     })
-      .then((response) =>  {
+      .then( async (response) =>  {
+        const token = await response.json()
         setContextState({
-          newValue: response.json().token,
+          newValue: token.token,
           type: "SET_USER_TOKEN",
         });
         setContextState({ newValue: false, type: "SET_LOADING" });
-        console.log(contextState.userToken);
-        alert("Los datos se esta procesando, espere un momento");
-        navigation.navigate("/lista");
+        navigation.navigate("buscador");
       })
       .catch((error) => {
         alert(JSON.stringify(error));
