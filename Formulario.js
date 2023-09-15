@@ -10,7 +10,7 @@ import {
   Button,
 } from "react-native";
 import { useState } from "react";
-import { ContextProvider, useContextState } from "./contextState";
+import { ActionTypes, useContextState } from "./contextState";
 
 const Formulario = ({navigation}) => {
   const { contextState, setContextState } = useContextState();
@@ -34,7 +34,7 @@ const Formulario = ({navigation}) => {
         console.log(token.token)
         setContextState({
           newValue: token.token,
-          type: "SET_USER_TOKEN",
+          type: ActionTypes.setUserToken,
         });
         setContextState({ newValue: false, type: "SET_LOADING" });
         navigation.navigate("buscador");
@@ -56,7 +56,6 @@ const Formulario = ({navigation}) => {
   };
 
   return (
-    <ContextProvider>
     <View style={styles.container}>
       <Text>Email:</Text>
       <TextInput
@@ -84,7 +83,6 @@ const Formulario = ({navigation}) => {
         <Text style={{ color: "white" }}>Enviar</Text>
       </Pressable>
     </View>
-    </ContextProvider>
   );
 };
 

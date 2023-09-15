@@ -1,4 +1,3 @@
-import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
   StyleSheet,
@@ -10,43 +9,79 @@ import {
   TouchableOpacity,
   Button
 } from "react-native";
-import { useState } from 'react';
-import { useContextState, ContextProvider } from "./contextState";
+import { useState, React, useEffect  } from 'react';
+import { ActionTypes,useContextState} from "./contextState";
 
 
-const Menu = () => {
+const Menu = ({route,navigation}) => {
   const { contextState, setContextState } = useContextState();
-  const { plato, seleccionarPlato } = useState();
 
+  useEffect(() => {
+
+      const response = fetch(
+        `https://api.spoonacular.com/recipes/${route.params.id}/information?apiKey=383fc80d46654b08912b0ff16ae73bab&includeNutrition=true`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      )
+        .then(async (response) => {
+          const resetas = await response.json();
+          setContextState({
+            newValue: resetas,
+            type: ActionTypes.setDetallado,
+          });
+          setContextState({ newValue: false, type: "SET_LOADING" });
+        })
+        .catch((error) => {
+          alert(JSON.stringify(error));
+          console.error(error);
+        });
+  }, []);
 
   const agregaMenu = (plato) => {
-    return menu.some((item) => item.id === dish.id);
+    return menu.some((item) => item.id === plato.id);
   };
 
-  return (
-    <ContextProvider>
-      <View>
-        {dishes.map((plato) => (
-          <View key={plato.id}>
-            <Text>{plato.name}</Text>
-            {seleccionarPlato === plato.id ? (
-              <Text>{plato.descripcion}</Text>
-            ) : (
-              <Button title="Agregar al menu" onPress={() => agregaMenu(plato)} />
-            )}
-            <Button
-              title="Mostrar detalles"
-              onPress={() => setSeleccionarPlato(plato.id)}
-            />
-          </View>
-        ))}
-        <Text>Menu:</Text>
-        {menu.map((menuItem) => (
-          <Text key={menuItem.id}>{menuItem.name}</Text>
-        ))}
+  return contextState.detallado ? (
+
+      <View style={styles.container2}>
+        <Text style={styles.title}>
+         {contextState.detallado.title}
+        </Text>
+        <Text> $ {contextState.detallado.pricePerServing} </Text>
+        <Image source={{ uri: contextState.detallado.image }} />
+        
       </View>
-    </ContextProvider>
+  ): (
+    <View style={styles.container}>
+      <Text style={styles.alerta}>
+        La informacion esta cargando, por favor, espere...
+      </Text>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#634fe3",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: StatusBar.currentHeight || 0,
+  },
+  container2: {
+    marginTop: StatusBar.currentHeight || 0, 
+    backgroundColor: "#634fe3",
+    flex: 1,
+  },
+  title: {
+    fontSize: 32,
+  },
+  alerta: {
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+});
 
 export default Menu;

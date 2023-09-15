@@ -13,13 +13,15 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
+    <ContextProvider>
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="login" component={Formulario} />
         <Stack.Screen name="buscador" component={Lista} />
-        <Stack.Screen name="detalle" component={DetallePlato} />
+        <Stack.Screen name="verdetalle" component={DetallePlato} />
       </Stack.Navigator>
     </NavigationContainer>
+    </ContextProvider>
   );
 }
 

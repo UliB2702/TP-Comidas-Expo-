@@ -9,29 +9,29 @@ import {
   Image,
   Button,
 } from "react-native";
-import { useContextState, ContextProvider } from "./contextState";
+import { ActionTypes, useContextState } from "./contextState";
 
-const Lista = () => {
+const Lista = ({navigation}) => {
   const { contextState, setContextState } = useContextState();
-  const [buscador, setBuscador] = useState('');
+  const [buscador, setBuscador] = useState("");
 
 
   useEffect(() => {
     if (buscador.length > 1) {
       const response = fetch(
-        `https://api.spoonacular.com/recipes/complexSearch?query=${buscador}&maxFat=25&number=20&apiKey=012e92b2a7d64c6b951c150fbddf774a&includeNutrition=true.`,
+        `https://api.spoonacular.com/recipes/complexSearch?query=${buscador}&maxFat=25&number=20&apiKey=383fc80d46654b08912b0ff16ae73bab&includeNutrition=true.`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         }
       )
-        .then((response) => {
+        .then(async (response) => {
+          const resetas = await response.json();
           setContextState({
-            newValue: response.json().results,
-            type: "SET_RECEPIES",
+            newValue: resetas.results,
+            type: ActionTypes.setRecepies,
           });
           setContextState({ newValue: false, type: "SET_LOADING" });
-          console.log(responseJson)
         })
         .catch((error) => {
           alert(JSON.stringify(error));
@@ -41,43 +41,43 @@ const Lista = () => {
   }, [buscador]);
 
   useEffect(() => {
-    console.log(contextState)
-  }, [contextState.userToken]
-  )
+    console.log(contextState);
+  }, [contextState.userToken]);
 
-  const Item = ({ title, image }) => (
+  const Item = ({ title, image, id }) => (
     <View style={styles.item}>
       <Text style={styles.title}>{title}</Text>
       <Image source={{ uri: image }} />
-      <Button title="Mas detalle" />
+      <Button
+        title="Mas detalle"
+        onPress={() => navigation.navigate("verdetalle", {id})}
+      />
     </View>
   );
-  return (
-
-    (contextState.userToken) ?
-      <ContextProvider>
-        <View style={styles.container}>
-
-          <TextInput
-            style={styles.input}
-            placeholder="Ingrese..."
-            onChangeText={setBuscador}
-            id="nombre"
-            value={buscador}
-          />
-          <FlatList
-            data={contextState?.allRecepies ?? []}
-            renderItem={({ item }) => <Item title={item.title} image={item.image} />}
-            keyExtractor={(item) => item.id}
-          />
-        </View> </ContextProvider> :
-      <ContextProvider> <View style={styles.container}>
-        <Text style={styles.alerta}>Atencion! No se le permite usar el buscador debido a que no inicio sesion. Vaya a la pagina principal para hacerlo</Text>
-      </View> </ContextProvider>
-
-
-
-
+  return contextState.userToken ? (
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        placeholder="Ingrese..."
+        onChangeText={setBuscador}
+        id="nombre"
+        value={buscador}
+      />
+      <FlatList
+        data={contextState?.allRecepies ?? []}
+        renderItem={({ item }) => (
+          <Item title={item.title} image={item.image} id={item.id} />
+        )}
+        keyExtractor={(item) => item.id}
+      />
+    </View>
+  ) : (
+    <View style={styles.container}>
+      <Text style={styles.alerta}>
+        Atencion! No se le permite usar el buscador debido a que no inicio
+        sesion. Vaya a la pagina principal para hacerlo
+      </Text>
+    </View>
   );
 };
 
@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
   },
   alerta: {
     fontWeight: "bold",
-    fontSize: 20
-  }
+    fontSize: 20,
+  },
 });
 
 export default Lista;
