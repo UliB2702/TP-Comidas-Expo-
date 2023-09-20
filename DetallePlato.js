@@ -13,7 +13,7 @@ import { useState, React, useEffect  } from 'react';
 import { ActionTypes,useContextState} from "./contextState";
 
 
-const Menu = ({route,navigation}) => {
+const Detallado = ({route,navigation}) => {
   const { contextState, setContextState } = useContextState();
 
   useEffect(() => {
@@ -50,8 +50,10 @@ const Menu = ({route,navigation}) => {
          {contextState.detallado.title}
         </Text>
         <Text> $ {contextState.detallado.pricePerServing} </Text>
-        <Image source={{ uri: contextState.detallado.image }} />
-        
+        <Image style={styles.image} source={{uri: contextState.detallado.image}} />
+        <Text> Puntaje de salud: {contextState.detallado.healthScore} </Text>
+        <Text> ¿Vegano? : {contextState.detallado.vegan} </Text>
+        <Text> Mas informacion: {contextState.detallado.spoonacularSourceUrl} </Text>
       </View>
   ): (
     <View style={styles.container}>
@@ -68,20 +70,33 @@ const styles = StyleSheet.create({
     backgroundColor: "#634fe3",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: StatusBar.currentHeight || 0,
   },
   container2: {
-    marginTop: StatusBar.currentHeight || 0, 
     backgroundColor: "#634fe3",
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: StatusBar.currentHeight || 0,
     flex: 1,
   },
   title: {
-    fontSize: 32,
+    fontSize: 24,
   },
-  alerta: {
-    fontWeight: "bold",
-    fontSize: 20,
+  price: {
+    fontSize: 18,
+    marginTop: 10,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginTop: 20,
+    borderRadius: 10,
+  },
+  score: {
+    fontSize: 16,
+    marginTop: 10,
   },
 });
 
-export default Menu;
+export default Detallado;

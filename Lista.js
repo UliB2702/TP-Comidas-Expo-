@@ -47,7 +47,7 @@ const Lista = ({navigation}) => {
   const Item = ({ title, image, id }) => (
     <View style={styles.item}>
       <Text style={styles.title}>{title}</Text>
-      <Image source={{ uri: image }} />
+      <Image style={styles.image} source={{uri: image}} />
       <Button
         title="Mas detalle"
         onPress={() => navigation.navigate("verdetalle", {id})}
@@ -87,13 +87,23 @@ const styles = StyleSheet.create({
     backgroundColor: "#634fe3",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: StatusBar.currentHeight || 0,
+    paddingTop: StatusBar.currentHeight || 30,
   },
   item: {
     backgroundColor: "#ccc2ff",
+    paddingTop: 10,
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+    maxWidth: 500,
+    maxHeight: 500,
+  },
+  image: {
+    width: 460,
+    height: 150,
+    marginBottom: 20,
+    marginTop: 20,
+    borderRadius: 10,
   },
   title: {
     fontSize: 32,
