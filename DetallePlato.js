@@ -43,6 +43,15 @@ const Detallado = ({route,navigation}) => {
     return menu.some((item) => item.id === plato.id);
   };
 
+  const vegan = (vegan)=>{
+    if(vegan === true){
+      return (<Text>Sí</Text>)
+    }else{
+      return (<Text>No</Text>)
+    }
+
+
+  }
   return contextState.detallado ? (
 
       <View style={styles.container2}>
@@ -52,8 +61,9 @@ const Detallado = ({route,navigation}) => {
         <Text> $ {contextState.detallado.pricePerServing} </Text>
         <Image style={styles.image} source={{uri: contextState.detallado.image}} />
         <Text> Puntaje de salud: {contextState.detallado.healthScore} </Text>
-        <Text> ¿Vegano? : {contextState.detallado.vegan} </Text>
+        <Text> ¿Vegano? : {vegan(contextState.detallado.vegan)} </Text>
         <Text> Mas informacion: {contextState.detallado.spoonacularSourceUrl} </Text>
+        <Button title="Agregar a menu" onPress={() => navigation.navigate("menu")}/>
       </View>
   ): (
     <View style={styles.container}>

@@ -4,14 +4,16 @@ export const initialState = {
   loading: false,
   userToken: "",
   allRecepies: [],
-  detallado: undefined
+  detallado: undefined,
+  menu: []
 };
 
 export const ActionTypes = {
   setLoading: "SET_LOADING",
   setUserToken: "SET_USER_TOKEN",
   setRecepies: "SET_RECEPIES",
-  setDetallado: "SET_DETALLADO"
+  setDetallado: "SET_DETALLADO",
+  setMenu: "SET_MENU"
 };
 
 export const reducer = (state = initialState, action) => {
@@ -30,6 +32,10 @@ export const reducer = (state = initialState, action) => {
     case ActionTypes.setDetallado: {
       console.log(action)
       return { ...state, detallado: action.newValue };
+    }
+    case ActionTypes.setMenu: {
+      console.log(action)
+      return { ...state, menu: action.newValue };
     }
     default: {
       return state;

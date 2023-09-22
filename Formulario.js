@@ -37,7 +37,7 @@ const Formulario = ({navigation}) => {
           type: ActionTypes.setUserToken,
         });
         setContextState({ newValue: false, type: "SET_LOADING" });
-        navigation.navigate("buscador");
+        navigation.navigate("menu");
       })
       .catch((error) => {
         alert(JSON.stringify(error));

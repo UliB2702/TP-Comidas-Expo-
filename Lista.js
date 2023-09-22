@@ -9,6 +9,7 @@ import {
   Image,
   Button,
 } from "react-native";
+
 import { ActionTypes, useContextState } from "./contextState";
 
 const Lista = ({navigation}) => {
