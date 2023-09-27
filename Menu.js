@@ -5,7 +5,6 @@ import {
   Text,
   View,
   FlatList,
-  TextInput,
   Image,
   Button,
 } from "react-native";
@@ -13,11 +12,10 @@ import { ActionTypes, useContextState } from "./contextState";
 
 const Menu = ({ navigation }) => {
   const { contextState, setContextState } = useContextState();
-  const [maxHealthScore, setMaxHealthScore] = useState(undefined);
 
   useEffect(() => {
       const response = fetch(
-        `https://api.spoonacular.com/recipes/complexSearch?&number=2&apiKey=383fc80d46654b08912b0ff16ae73bab&includeNutrition=true.`,
+        `https://api.spoonacular.com/recipes/716426/information?includeNutrition=false&apiKey=383fc80d46654b08912b0ff16ae73bab`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -26,7 +24,7 @@ const Menu = ({ navigation }) => {
         .then(async (response) => {
           const resetas = await response.json();
           setContextState({
-            newValue: resetas.results,
+            newValue: resetas,
             type: ActionTypes.setMenu,
           });
           setContextState({ newValue: false, type: "SET_LOADING" });
@@ -41,7 +39,7 @@ const Menu = ({ navigation }) => {
   // falta hacer por Id para que me de los datos del precio y puntaje de salud
   useEffect(() => {
     const response = fetch(
-      `https://api.spoonacular.com/recipes/complexSearch?&number=2&apiKey=383fc80d46654b08912b0ff16ae73bab&includeNutrition=true&diet=vegan.`,
+      `https://api.spoonacular.com/recipes/782585/information?includeNutrition=false&apiKey=383fc80d46654b08912b0ff16ae73bab`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -50,7 +48,7 @@ const Menu = ({ navigation }) => {
       .then(async (response) => {
         const resetas = await response.json();
         setContextState({
-          newValue: resetas.results,
+          newValue: resetas,
           type: ActionTypes.setMenu,
         });
         setContextState({ newValue: false, type: "SET_LOADING" });
@@ -62,12 +60,58 @@ const Menu = ({ navigation }) => {
   
 }, []);
 
+useEffect(() => {
+  const response = fetch(
+    `https://api.spoonacular.com/recipes/702313/information?includeNutrition=false&apiKey=383fc80d46654b08912b0ff16ae73bab`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    }
+  )
+    .then(async (response) => {
+      const resetas = await response.json();
+      setContextState({
+        newValue: resetas,
+        type: ActionTypes.setMenu,
+      });
+      setContextState({ newValue: false, type: "SET_LOADING" });
+    })
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
+    });
+
+}, []);
+
+useEffect(() => {
+  const response = fetch(
+    `https://api.spoonacular.com/recipes/702413/information?includeNutrition=false&apiKey=383fc80d46654b08912b0ff16ae73bab`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    }
+  )
+    .then(async (response) => {
+      const resetas = await response.json();
+      setContextState({
+        newValue: resetas,
+        type: ActionTypes.setMenu,
+      });
+      setContextState({ newValue: false, type: "SET_LOADING" });
+    })
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
+    });
+
+}, []);
+
 const sum = contextState.menu.reduce((accumulator, value) => {
     return accumulator + value.pricePerServing;
 }, 0);
 
 const hPrice = contextState.menu.reduce((accumulator, value) => {
-    return accumulator + value.pricePerServing;
+    return accumulator + value.healthScore;
 }, 0);
 
 
@@ -78,6 +122,10 @@ const hPrice = contextState.menu.reduce((accumulator, value) => {
       <Button
         title="Mas detalle"
         onPress={() => navigation.navigate("verdetalle", {id})}
+      />
+      <Button
+        title="Eliminar plato"
+        color= "#ff0000"
       />
     </View>
   );
@@ -94,10 +142,7 @@ const hPrice = contextState.menu.reduce((accumulator, value) => {
         keyExtractor={(item) => item.id}
         />
         <Text style={styles.totalPrice}>Total: ${sum}</Text>
-        <Text style={styles.totalPrice}>Puntaje de salud total: {contextState.menu.reduce((accumulator, value) => {
-            console.log(value)
-    return accumulator + value.healthScore;
-}, 0)}</Text>
+        <Text style={styles.totalPrice}>Puntaje de salud total: {hPrice}</Text>
         <Button title="Agregar Plato" onPress={() => navigation.navigate("buscador")}/>
       </View>
     </View>
@@ -105,58 +150,76 @@ const hPrice = contextState.menu.reduce((accumulator, value) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#634fe3",
-      alignItems: "center",
-      justifyContent: "center",
-      paddingTop: StatusBar.currentHeight || 30,
-    },
-  container2: {
+  container: {
+    flex: 1,
     backgroundColor: "#634fe3",
-    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: StatusBar.currentHeight || 30,
+  },
+  container2: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
     padding: 20,
     alignItems: "center",
     justifyContent: "center",
     marginTop: StatusBar.currentHeight || 0,
     flex: 1,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
   title: {
-    fontSize: 32,
+    fontSize: 36,
+    fontWeight: "bold",
+    marginBottom: 10,
   },
   price: {
-    fontSize: 18,
+    fontSize: 20,
     marginTop: 10,
   },
   image: {
-    width: 460,
-    height: 150,
+    width: "100%",
+    height: 200,
     marginBottom: 20,
-    marginTop: 20,
-    borderRadius: 10,
+    borderRadius: 20,
   },
   score: {
-    fontSize: 16,
+    fontSize: 18,
     marginTop: 10,
   },
   totalPrice: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
-    marginTop: 20,
+    marginTop: 10,
   },
-    item: {
-      backgroundColor: "#ccc2ff",
-      paddingTop: 10,
-      padding: 20,
-      marginVertical: 8,
-      marginHorizontal: 16,
-      maxWidth: 500,
-      maxHeight: 500,
+  item: {
+    backgroundColor: "#f0f0f0",
+    padding: 20,
+    marginVertical: 10,
+    marginHorizontal: 20,
+    borderRadius: 10,
+    maxWidth: 300,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    alerta: {
-      fontWeight: "bold",
-      fontSize: 20,
-    },
-  });
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  alerta: {
+    fontWeight: "bold",
+    fontSize: 24,
+    color: "#ff634f",
+  }
+});
+
 
 export default Menu;

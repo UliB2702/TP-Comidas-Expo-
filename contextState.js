@@ -35,7 +35,8 @@ export const reducer = (state = initialState, action) => {
     }
     case ActionTypes.setMenu: {
       console.log(action)
-      return { ...state, menu: action.newValue };
+      state.menu.push(action.newValue)
+      return { ...state };
     }
     default: {
       return state;

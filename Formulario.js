@@ -5,9 +5,7 @@ import {
   Text,
   View,
   TextInput,
-  Image,
   Pressable,
-  Button,
 } from "react-native";
 import { useState } from "react";
 import { ActionTypes, useContextState } from "./contextState";
