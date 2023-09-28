@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -12,10 +12,9 @@ import {
 
 import { ActionTypes, useContextState } from "./contextState";
 
-const Lista = ({navigation}) => {
+const Lista = ({ navigation }) => {
   const { contextState, setContextState } = useContextState();
   const [buscador, setBuscador] = useState("");
-
 
   useEffect(() => {
     if (buscador.length > 1) {
@@ -48,13 +47,14 @@ const Lista = ({navigation}) => {
   const Item = ({ title, image, id }) => (
     <View style={styles.item}>
       <Text style={styles.title}>{title}</Text>
-      <Image style={styles.image} source={{uri: image}} />
+      <Image style={styles.image} source={{ uri: image }} />
       <Button
         title="Mas detalle"
-        onPress={() => navigation.navigate("verdetalle", {id})}
+        onPress={() => navigation.navigate("verdetalle", { id })}
       />
     </View>
   );
+
   return contextState.userToken ? (
     <View style={styles.container}>
       <TextInput
@@ -70,13 +70,14 @@ const Lista = ({navigation}) => {
           <Item title={item.title} image={item.image} id={item.id} />
         )}
         keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false} // Hide the scroll bar
       />
+
     </View>
   ) : (
     <View style={styles.container}>
       <Text style={styles.alerta}>
-        Atencion! No se le permite usar el buscador debido a que no inicio
-        sesion. Vaya a la pagina principal para hacerlo
+        Atención! No se le permite usar el buscador debido a que no ha iniciado sesión. Vaya a la página principal para hacerlo.
       </Text>
     </View>
   );
@@ -92,26 +93,42 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: "#ccc2ff",
-    paddingTop: 10,
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
     maxWidth: 500,
-    maxHeight: 500,
+    borderRadius: 10,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   image: {
-    width: 460,
+    width: "100%",
     height: 150,
     marginBottom: 20,
     marginTop: 20,
     borderRadius: 10,
   },
   title: {
-    fontSize: 32,
+    fontSize: 24,
+  },
+  input: {
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 5,
+    width: "20%",
+    marginBottom: 20,
+    fontSize: 16,
   },
   alerta: {
     fontWeight: "bold",
     fontSize: 20,
+    color: "#ff634f",
   },
 });
 
