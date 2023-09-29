@@ -37,11 +37,17 @@ const Detallado = ({ route, navigation }) => {
 
   const agregaMenu = () => {
     const reseta = contextState.detallado;
+    if(contextState.menu.includes(reseta))
+    {
+      return;
+    }
+    else{
     setContextState({
       newValue: reseta,
       type: ActionTypes.setMenu,
     });
     navigation.navigate('menu');
+    }
   };
 
   const vegan = (vegan) => {
