@@ -13,7 +13,8 @@ export const ActionTypes = {
   setUserToken: "SET_USER_TOKEN",
   setRecepies: "SET_RECEPIES",
   setDetallado: "SET_DETALLADO",
-  setMenu: "SET_MENU"
+  setMenu: "SET_MENU",
+  removeMenu: "REMOVE_MENU"
 };
 
 export const reducer = (state = initialState, action) => {
@@ -37,6 +38,10 @@ export const reducer = (state = initialState, action) => {
       console.log(action)
       state.menu.push(action.newValue)
       return { ...state };
+    }
+    case ActionTypes.removeMenu: {
+      console.log(action)
+      return { ...state, menu: action.newValue };
     }
     default: {
       return state;

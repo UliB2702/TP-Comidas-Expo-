@@ -9,6 +9,7 @@ import {
   Image,
   Button,
 } from "react-native";
+import LoadingAnimation from "./LoadingAnimation.js";
 
 import { ActionTypes, useContextState } from "./contextState";
 
@@ -19,7 +20,7 @@ const Lista = ({ navigation }) => {
   useEffect(() => {
     if (buscador.length > 1) {
       const response = fetch(
-        `https://api.spoonacular.com/recipes/complexSearch?query=${buscador}&maxFat=25&number=20&apiKey=383fc80d46654b08912b0ff16ae73bab&includeNutrition=true.`,
+        `https://api.spoonacular.com/recipes/complexSearch?query=${buscador}&maxFat=25&number=20&apiKey=d1b25ab4f2944ccd93f22ec43d4431b1&includeNutrition=true.`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -57,6 +58,7 @@ const Lista = ({ navigation }) => {
 
   return contextState.userToken ? (
     <View style={styles.container}>
+    <View style={styles.container2}>  
       <TextInput
         style={styles.input}
         placeholder="Ingrese..."
@@ -72,7 +74,7 @@ const Lista = ({ navigation }) => {
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false} // Hide the scroll bar
       />
-
+    </View>
     </View>
   ) : (
     <View style={styles.container}>
@@ -86,17 +88,35 @@ const Lista = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#634fe3",
+    backgroundColor: "#7e638c",
     alignItems: "center",
     justifyContent: "center",
     paddingTop: StatusBar.currentHeight || 30,
   },
+  container2: {
+    backgroundColor: "#fffad3", 
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: StatusBar.currentHeight || 0,
+    flex: 1,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
   item: {
-    backgroundColor: "#ccc2ff",
+    backgroundColor: "#d6dd90",
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-    maxWidth: 500,
+    minWidth: 300,
+    maxWidth: 300,
     borderRadius: 10,
     elevation: 3,
     shadowColor: "#000",
@@ -121,7 +141,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 10,
     borderRadius: 5,
-    width: "20%",
+    width: "100%",
     marginBottom: 20,
     fontSize: 16,
   },

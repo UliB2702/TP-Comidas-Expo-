@@ -11,6 +11,7 @@ import {
   Animated,
 } from "react-native";
 import { ActionTypes, useContextState } from "./contextState";
+import LoadingAnimation from "./LoadingAnimation.js";
 
 
 const Menu = ({ navigation }) => {
@@ -19,7 +20,7 @@ const Menu = ({ navigation }) => {
 
   useEffect(() => {
       const response = fetch(
-        `https://api.spoonacular.com/recipes/716426/information?includeNutrition=false&apiKey=383fc80d46654b08912b0ff16ae73bab`,
+        `https://api.spoonacular.com/recipes/716426/information?includeNutrition=false&apiKey=d1b25ab4f2944ccd93f22ec43d4431b1`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -46,11 +47,9 @@ const Menu = ({ navigation }) => {
   }, []);
 
   
-
-  // falta hacer por Id para que me de los datos del precio y puntaje de salud
   useEffect(() => {
     const response = fetch(
-      `https://api.spoonacular.com/recipes/782585/information?includeNutrition=false&apiKey=383fc80d46654b08912b0ff16ae73bab`,
+      `https://api.spoonacular.com/recipes/782585/information?includeNutrition=false&apiKey=d1b25ab4f2944ccd93f22ec43d4431b1`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -78,7 +77,35 @@ const Menu = ({ navigation }) => {
 
 useEffect(() => {
   const response = fetch(
-    `https://api.spoonacular.com/recipes/702313/information?includeNutrition=false&apiKey=383fc80d46654b08912b0ff16ae73bab`,
+    `https://api.spoonacular.com/recipes/795751/information?includeNutrition=false&apiKey=d1b25ab4f2944ccd93f22ec43d4431b1`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    }
+  )
+    .then(async (response) => {
+      const resetas = await response.json();
+      setContextState({
+        newValue: resetas,
+        type: ActionTypes.setMenu,
+      });
+      setContextState({ newValue: false, type: "SET_LOADING" });
+    })
+    .catch((error) => {
+      alert(JSON.stringify(error));
+      console.error(error);
+    });
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: false, // Required for shadow animation
+    }).start();
+
+}, []);
+
+useEffect(() => {
+  const response = fetch(
+    `https://api.spoonacular.com/recipes/715415/information?includeNutrition=false&apiKey=d1b25ab4f2944ccd93f22ec43d4431b1`,
     {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -114,6 +141,15 @@ const hPrice = contextState.menu.reduce((accumulator, value) => {
   return accumulator + value.healthScore;
 }, 0);
 
+function Eliminar(id){
+  console.log("A eliminar")
+  const nuevoMenu = contextState.menu.filter((item) => item.id !== id)
+  setContextState({
+    newValue: nuevoMenu,
+    type: ActionTypes.removeMenu,
+  });
+
+}
 
   const Item = ({ title, image, id }) => (
     <Animated.View // Apply fade animation to the item container
@@ -128,9 +164,7 @@ const hPrice = contextState.menu.reduce((accumulator, value) => {
         <Text style={styles.buttonText}>Mas detalle</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => {
-          
-        }}
+        onPress={() => {Eliminar(id)}}
         style={[styles.button, styles.buttonDelete]}
       >
         <Text style={styles.buttonText}>Eliminar plato</Text>
@@ -138,7 +172,7 @@ const hPrice = contextState.menu.reduce((accumulator, value) => {
     </Animated.View>
   );
 
-  return (
+  return contextState.menu ? (
     <View style={styles.container}>
       <View style={[styles.container2, styles.shadow]}>
         <Text style={styles.title}>Menú</Text>
@@ -150,7 +184,7 @@ const hPrice = contextState.menu.reduce((accumulator, value) => {
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
         />
-        <Text style={styles.totalPrice}>Total: ${sum}</Text>
+        <Text style={styles.totalPrice}>Total: ${sum.toFixed(2)}</Text>
         <Text style={styles.totalPrice}>Puntaje de salud total: {hPrice}</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate("buscador")}
@@ -161,6 +195,10 @@ const hPrice = contextState.menu.reduce((accumulator, value) => {
         </TouchableOpacity>
       </View>
     </View>
+  ) : (
+    <View style={styles.loadingContainer}>
+    <LoadingAnimation/>
+    </View>
   );
 
 
@@ -169,13 +207,13 @@ const hPrice = contextState.menu.reduce((accumulator, value) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#634fe3", // Preserve the previous background color
+    backgroundColor: "#7e638c", // Preserve the previous background color
     alignItems: "center",
     justifyContent: "center",
     paddingTop: StatusBar.currentHeight || 30,
   },
   container2: {
-    backgroundColor: "#FFFFFF", // White background
+    backgroundColor: "#fffad3", // White background
     borderRadius: 10,
     padding: 20,
     alignItems: "center",
@@ -196,6 +234,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20, // More spacing below title
     color: "#333333", // Darker text color
+    fontFamily: 'Lobster-Regular'
   },
   image: {
     width: "100%",
@@ -208,9 +247,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 20, // More spacing above total
     color: "#333333",
+    fontFamily: 'Lobster-Regular'
   },
   item: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#d6dd90",
     padding: 20,
     marginVertical: 10,
     marginHorizontal: 20,
@@ -232,21 +272,22 @@ const styles = StyleSheet.create({
     marginTop: 12,
     alignItems: "center",
     justifyContent: "center",
-  },
+  }, 
   buttonDetail: {
     backgroundColor: "#007AFF",
   },
   buttonDelete: {
-    backgroundColor: "#ff0000",
+    backgroundColor: "#d6496c",
   },
   buttonAdd: {
-    backgroundColor: "#007AFF",
+    backgroundColor: "#7db8a2",
     marginTop: 20,
   },
   buttonText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+    fontFamily: 'Lobster-Regular'
   },
 });
 

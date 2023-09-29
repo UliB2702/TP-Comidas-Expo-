@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { ActionTypes, useContextState } from "./contextState";
 
+
 const Formulario = ({ navigation }) => {
   const { contextState, setContextState } = useContextState();
   const [email, setEmail] = useState("");
@@ -17,7 +18,7 @@ const Formulario = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   function verificacion() {
-    const response = fetch(`http://challenge-react.alkemy.org/`, {
+    fetch(`http://challenge-react.alkemy.org/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,6 +29,14 @@ const Formulario = ({ navigation }) => {
       }),
     })
       .then(async (response) => {
+        console.log(response.status)
+        if(response.status > 300){
+          alert(JSON.stringify("error"));
+          console.error("error");
+          alert("Los datos no son correctos, vuelva a intentarlo");
+          setIsLoading(false);
+          return;
+        }
         const token = await response.json();
         console.log(token.token);
         setContextState({
@@ -37,11 +46,6 @@ const Formulario = ({ navigation }) => {
         setContextState({ newValue: false, type: "SET_LOADING" });
         navigation.navigate("menu");
       })
-      .catch((error) => {
-        alert(JSON.stringify(error));
-        console.error(error);
-        alert("Los datos no son correctos, vuelva a intentarlo");
-      });
   }
 
   const handleLogin = () => {
@@ -55,6 +59,7 @@ const Formulario = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title0}>Administrador de Comidas</Text>
       <Text style={styles.title}>Inicio de Sesión</Text>
       <View style={styles.formContainer}>
         <Text>Email:</Text>
@@ -92,7 +97,7 @@ const screenWidth = Dimensions.get("window").width;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#634fe3",
+    backgroundColor: "#7e638c",
     alignItems: "center",
     justifyContent: "center",
     marginTop: StatusBar.currentHeight || 0,
@@ -102,12 +107,21 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     color: "white",
+    fontFamily: 'Lobster-Regular'
+  },
+  title0: {
+    fontSize: 50,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: "white",
+    fontFamily: 'Lobster-Regular',
+    textAlign: "center"
   },
   formContainer: {
-    backgroundColor: "white",
+    backgroundColor: "#d6dd90",
     borderRadius: 10,
     padding: 20,
-    width: screenWidth / 7, 
+    width: 300, 
     marginBottom: 20,
   },
   input: {
@@ -117,17 +131,17 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 10,
+    backgroundColor: '#fffad3',
   },
-  button: {
-    backgroundColor: "#007AFF",
+  buttonText: {
+    backgroundColor: "#7db8a2",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
-  },
-  buttonText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+    fontFamily: 'Lobster-Regular'
   },
 });
 
