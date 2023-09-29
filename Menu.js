@@ -20,7 +20,7 @@ const Menu = ({ navigation }) => {
 
   useEffect(() => {
       const response = fetch(
-        `https://api.spoonacular.com/recipes/716426/information?includeNutrition=false&apiKey=d1b25ab4f2944ccd93f22ec43d4431b1`,
+        `https://api.spoonacular.com/recipes/716426/information?includeNutrition=false&apiKey=87bf79454bf74d0186058ff564a3a741`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -49,7 +49,7 @@ const Menu = ({ navigation }) => {
   
   useEffect(() => {
     const response = fetch(
-      `https://api.spoonacular.com/recipes/782585/information?includeNutrition=false&apiKey=d1b25ab4f2944ccd93f22ec43d4431b1`,
+      `https://api.spoonacular.com/recipes/782585/information?includeNutrition=false&apiKey=87bf79454bf74d0186058ff564a3a741`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -77,7 +77,7 @@ const Menu = ({ navigation }) => {
 
 useEffect(() => {
   const response = fetch(
-    `https://api.spoonacular.com/recipes/795751/information?includeNutrition=false&apiKey=d1b25ab4f2944ccd93f22ec43d4431b1`,
+    `https://api.spoonacular.com/recipes/795751/information?includeNutrition=false&apiKey=87bf79454bf74d0186058ff564a3a741`,
     {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -105,7 +105,7 @@ useEffect(() => {
 
 useEffect(() => {
   const response = fetch(
-    `https://api.spoonacular.com/recipes/715415/information?includeNutrition=false&apiKey=d1b25ab4f2944ccd93f22ec43d4431b1`,
+    `https://api.spoonacular.com/recipes/715415/information?includeNutrition=false&apiKey=87bf79454bf74d0186058ff564a3a741`,
     {
       method: "GET",
       headers: { "Content-Type": "application/json" },

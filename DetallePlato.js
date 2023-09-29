@@ -15,7 +15,7 @@ const Detallado = ({ route, navigation }) => {
 
   useEffect(() => {
     const response = fetch(
-      `https://api.spoonacular.com/recipes/${route.params.id}/information?apiKey=d1b25ab4f2944ccd93f22ec43d4431b1&includeNutrition=true`,
+      `https://api.spoonacular.com/recipes/${route.params.id}/information?apiKey=87bf79454bf74d0186058ff564a3a741&includeNutrition=true`,
       {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
