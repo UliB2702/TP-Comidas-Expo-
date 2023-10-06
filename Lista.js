@@ -20,7 +20,7 @@ const Lista = ({ navigation }) => {
   useEffect(() => {
     if (buscador.length > 1) {
       const response = fetch(
-        `https://api.spoonacular.com/recipes/complexSearch?query=${buscador}&maxFat=25&number=20&apiKey=87bf79454bf74d0186058ff564a3a741&includeNutrition=true.`,
+        `https://api.spoonacular.com/recipes/complexSearch?query=${buscador}&maxFat=25&number=20&apiKey=865afe1ad4854b108e30ecd98b6f6135&includeNutrition=true.`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },

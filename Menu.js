@@ -14,124 +14,18 @@ import { ActionTypes, useContextState } from "./contextState";
 import LoadingAnimation from "./LoadingAnimation.js";
 
 
+
 const Menu = ({ navigation }) => {
   const { contextState, setContextState } = useContextState();
   const [fadeAnim] = useState(new Animated.Value(0));
-
+  
   useEffect(() => {
-      const response = fetch(
-        `https://api.spoonacular.com/recipes/716426/information?includeNutrition=false&apiKey=87bf79454bf74d0186058ff564a3a741`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      )
-        .then(async (response) => {
-          const resetas = await response.json();
-          setContextState({
-            newValue: resetas,
-            type: ActionTypes.setMenu,
-          });
-          setContextState({ newValue: false, type: "SET_LOADING" });
-        })
-        .catch((error) => {
-          alert(JSON.stringify(error));
-          console.error(error);
-        });
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: false, // Required for shadow animation
-        }).start();
-    
+    Animated.timing(fadeAnim, {
+      toValue: 1, // o el valor que desees para que sea completamente visible
+      duration: 1000, // ajusta la duración según tus necesidades
+      useNativeDriver: true,
+    }).start();
   }, []);
-
-  
-  useEffect(() => {
-    const response = fetch(
-      `https://api.spoonacular.com/recipes/782585/information?includeNutrition=false&apiKey=87bf79454bf74d0186058ff564a3a741`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      }
-    )
-      .then(async (response) => {
-        const resetas = await response.json();
-        setContextState({
-          newValue: resetas,
-          type: ActionTypes.setMenu,
-        });
-        setContextState({ newValue: false, type: "SET_LOADING" });
-      })
-      .catch((error) => {
-        alert(JSON.stringify(error));
-        console.error(error);
-      });
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 1000,
-        useNativeDriver: false, // Required for shadow animation
-      }).start();
-  
-}, []);
-
-useEffect(() => {
-  const response = fetch(
-    `https://api.spoonacular.com/recipes/795751/information?includeNutrition=false&apiKey=87bf79454bf74d0186058ff564a3a741`,
-    {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    }
-  )
-    .then(async (response) => {
-      const resetas = await response.json();
-      setContextState({
-        newValue: resetas,
-        type: ActionTypes.setMenu,
-      });
-      setContextState({ newValue: false, type: "SET_LOADING" });
-    })
-    .catch((error) => {
-      alert(JSON.stringify(error));
-      console.error(error);
-    });
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: false, // Required for shadow animation
-    }).start();
-
-}, []);
-
-useEffect(() => {
-  const response = fetch(
-    `https://api.spoonacular.com/recipes/715415/information?includeNutrition=false&apiKey=87bf79454bf74d0186058ff564a3a741`,
-    {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    }
-  )
-    .then(async (response) => {
-      const resetas = await response.json();
-      setContextState({
-        newValue: resetas,
-        type: ActionTypes.setMenu,
-      });
-      setContextState({ newValue: false, type: "SET_LOADING" });
-    })
-    .catch((error) => {
-      alert(JSON.stringify(error));
-      console.error(error);
-    });
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: false, // Required for shadow animation
-    }).start();
-
-}, []);
-
-
 
 const sum = contextState.menu.reduce((accumulator, value) => {
   return accumulator + value.pricePerServing;
@@ -171,12 +65,15 @@ function Eliminar(id){
       </TouchableOpacity>
     </Animated.View>
   );
+  
 
   return contextState.menu ? (
     <View style={styles.container}>
       <View style={[styles.container2, styles.shadow]}>
         <Text style={styles.title}>Menú</Text>
+        {contextState.menu.length !== 0 &&
         <FlatList
+          style={styles.list}
           data={contextState?.menu ?? []}
           renderItem={({ item }) => (
             <Item title={item.title} image={item.image} id={item.id} />
@@ -184,8 +81,16 @@ function Eliminar(id){
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
         />
+          }
+        {
+          contextState.menu.length === 0 &&
+          <Text style={styles.button}> Tu menú esta vacio. Agrega platos con el buscador</Text>
+        }
+        {contextState.menu.length !== 0 &&
+        <>
         <Text style={styles.totalPrice}>Total: ${sum.toFixed(2)}</Text>
-        <Text style={styles.totalPrice}>Puntaje de salud total: {hPrice}</Text>
+        <Text style={styles.totalPrice}>Puntaje de salud total: {hPrice}</Text></>
+        }
         <TouchableOpacity
           onPress={() => navigation.navigate("buscador")}
           style={[styles.button, styles.buttonAdd]}
@@ -229,6 +134,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
+  list: {
+    flexGrow: 1,
+    flex: 1
+  },
   title: {
     fontSize: 24, // Larger title
     fontWeight: "bold",
@@ -255,7 +164,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginHorizontal: 20,
     borderRadius: 10,
-    maxWidth: 300,
+    width: 300,
     elevation: 3,
     shadowColor: "#000",
     shadowOffset: {
@@ -288,6 +197,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     fontFamily: 'Lobster-Regular'
+  },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: '#1a1a1a',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

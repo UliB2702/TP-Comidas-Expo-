@@ -15,7 +15,7 @@ const Detallado = ({ route, navigation }) => {
 
   useEffect(() => {
     const response = fetch(
-      `https://api.spoonacular.com/recipes/${route.params.id}/information?apiKey=87bf79454bf74d0186058ff564a3a741&includeNutrition=true`,
+      `https://api.spoonacular.com/recipes/${route.params.id}/information?apiKey=865afe1ad4854b108e30ecd98b6f6135&includeNutrition=true`,
       {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -37,18 +37,30 @@ const Detallado = ({ route, navigation }) => {
 
   const agregaMenu = () => {
     const reseta = contextState.detallado;
-    if(contextState.menu.includes(reseta))
-    {
-      return;
+      setContextState({
+        newValue: reseta,
+        type: ActionTypes.setMenu,
+      })
+      setContextState({
+        newValue: undefined,
+        type: ActionTypes.setDetallado
+      })
+      navigation.navigate('menu');
+  };
+
+  const Boton = () => {
+    console.log(contextState.detallado.id, contextState.menu)
+    if(!contextState.menu.find(elem => elem.id === contextState.detallado.id)){
+      return(
+      <Button title="Agregar a menú" onPress={() => agregaMenu()} style={[styles.button, styles.buttonText]} />
+      )
     }
     else{
-    setContextState({
-      newValue: reseta,
-      type: ActionTypes.setMenu,
-    });
-    navigation.navigate('menu');
+      return(
+        <Text style={styles.alertText}> Esta comida ya esta en tu menu! No la puedes volver a agregar</Text>
+      )
     }
-  };
+  }
 
   const vegan = (vegan) => {
     if (vegan === true) {
@@ -69,7 +81,7 @@ const Detallado = ({ route, navigation }) => {
         <Text style={styles.link}>Mas informacion:</Text>
         <Text style={styles.link}>{contextState.detallado.spoonacularSourceUrl}</Text>
       </View>
-      <Button title="Agregar a menú" onPress={() => agregaMenu()} style={[styles.button, styles.buttonText]}/>
+      <Boton/>
     </View>
   ) : (
     <View style={styles.loadingContainer}>
@@ -94,8 +106,8 @@ const styles = StyleSheet.create({
   detailsContainer: {
     alignItems: 'center',
     marginBottom: 10,
-    backgroundColor: '#fffad3', 
-    borderRadius: 15, 
+    backgroundColor: '#fffad3',
+    borderRadius: 15,
     padding: 10,
   },
   dot: {
@@ -113,6 +125,15 @@ const styles = StyleSheet.create({
     color: '#000',
     marginBottom: 5,
     fontFamily: 'Lobster-Regular'
+  },
+  alertText: {
+    fontSize: 20,
+    color: '#e61919',
+    marginBottom: 5,
+    fontFamily: 'Lobster-Regular',
+    marginTop: 12,
+    alignItems: "center",
+    justifyContent: "center",
   },
   price: {
     fontSize: 20,
